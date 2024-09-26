@@ -1,0 +1,27 @@
+<script>
+const express = require('express');
+const app = express();
+const fs = require('fs');
+const path = './endTime.json';
+
+// Endpoint to get the end time
+app.get('/get-end-time', (req, res) => {
+    if (fs.existsSync(path)) {
+        const endTime = fs.readFileSync(path);
+        res.json({ endTime: JSON.parse(endTime) });
+    } else {
+        res.json({ endTime: null });
+    }
+});
+
+// Endpoint to set the end time
+app.post('/set-end-time', (req, res) => {
+    const { endTime } = req.body;
+    fs.writeFileSync(path, JSON.stringify(endTime));
+    res.json({ success: true });
+});
+
+app.listen(3000, () => {
+    console.log('Server running on port 3000');
+});
+</script>
